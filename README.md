@@ -8,5 +8,5 @@ Create executable script
 
 Run the script
 ```
-./build/install/desolator/bin/desolator email password productId
+./build/install/desolator/bin/desolator [email] [password] [productId]
 ```
