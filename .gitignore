@@ -6,3 +6,5 @@ out/*
 .settings/*
 .project
 .classpath
+src/main/resources/*
+gradle/*
