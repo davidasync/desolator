@@ -86,9 +86,9 @@ object Main {
     @JvmStatic
     fun main(args: Array<String>) {
         val config = loadConfig()
-        val productIds = loadProductIds()
 
         while (true) {
+            val productIds = loadProductIds()
             val randomProductId = productIds.shuffled().get(0)
             val cookies = mapOf(
                     "_SID_Tokopedia_" to config.get("sid").toString(),
