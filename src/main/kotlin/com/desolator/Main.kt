@@ -2,20 +2,11 @@ package com.desolator
 
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonArray
-import com.google.gson.JsonObject
 import org.apache.commons.io.IOUtils
-import org.jsoup.Connection
 import org.jsoup.Jsoup
 import java.util.*
 
-
-data class Desolator (
-    val responseText: String,
-    val cookies: Map<String, String>,
-    val nextDinkIt: String?
-)
-
-fun dinkIt (email: String, password: String, productId: String, cookies: Map<String, String>?) {
+fun dinkIt (productId: String, cookies: Map<String, String>) {
     val tokopediaLoginUrl = Jsoup.connect("https://www.tokopedia.com/login").followRedirects(true).execute()
     val milliseconds = Calendar.getInstance().timeInMillis
     var loginCookies: Map<String, String>
@@ -27,24 +18,10 @@ fun dinkIt (email: String, password: String, productId: String, cookies: Map<Str
             "user-agent" to "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36 OPR/54.0.2952.54"
     )
 
-    if (cookies != null) {
-        loginCookies = cookies
-    } else {
-        loginCookies = Jsoup.connect(tokopediaLoginUrl.url().toString())
-                .headers(headers)
-                .cookies(tokopediaLoginUrl.cookies())
-                .data("email", email, "password", password, "remember_me", "on")
-                .method(Connection.Method.POST)
-                .execute()
-                .cookies()
-    }
-
-    println(loginCookies)
-
     val dinkItUrl = "https://www.tokopedia.com/ajax/product-e4.pl?action=event_dink_it&p_id=${productId}&v=${milliseconds}"
     val dinkItResult = Jsoup
             .connect(dinkItUrl)
-            .cookies(loginCookies)
+            .cookies(cookies)
             .get()
 
     println(dinkItResult)
@@ -96,8 +73,6 @@ object Main {
             )
 
             dinkIt(
-                    config.get("email").toString(),
-                    config.get("password").toString(),
                     randomProductId,
                     cookies
             )
